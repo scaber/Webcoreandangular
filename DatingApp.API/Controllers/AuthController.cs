@@ -49,8 +49,7 @@ namespace DatingApp.API.Controllers
         {
             try
             {
-               throw new  Exception("Noo");
-            var userFromRepo = await _repo.Login(userForLoginDto.Username, userForLoginDto.Password);
+             var userFromRepo = await _repo.Login(userForLoginDto.Username, userForLoginDto.Password);
             if (userFromRepo == null)
                 return Unauthorized();
 
