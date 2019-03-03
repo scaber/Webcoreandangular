@@ -1,3 +1,4 @@
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -46,6 +47,9 @@ namespace DatingApp.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
+            try
+            {
+               throw new  Exception("Noo");
             var userFromRepo = await _repo.Login(userForLoginDto.Username, userForLoginDto.Password);
             if (userFromRepo == null)
                 return Unauthorized();
@@ -69,6 +73,15 @@ namespace DatingApp.API.Controllers
                 token=tokenHandler.WriteToken(token)
             });  
 
+            }
+            catch (System.Exception)
+            {
+                
+                return StatusCode(500,"computer really says no");
+            }
+
+
+       
         }
     }
 }
