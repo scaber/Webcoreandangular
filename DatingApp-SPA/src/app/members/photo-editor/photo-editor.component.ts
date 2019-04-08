@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { NumberValueAccessor } from '@angular/forms/src/directives';
  
 @Component({
   selector: 'app-photo-editor',
@@ -50,6 +51,11 @@ export class PhotoEditorComponent implements OnInit {
           isMain: res.isMain
         };
         this.photos.push(photo);
+        if (photo.isMain) {
+          this.authService.changeMemberPhoto(photo.url);
+          this.authService.currentUser.photoUrl = photo.url;
+          localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
+        }
       }
     };
   }
@@ -65,4 +71,13 @@ export class PhotoEditorComponent implements OnInit {
       this.alertify.error(error);
     });
   } 
-}
+  deltePhoto(id: number) {
+    this.alertify.confirm('Are you sure you want to delete this photo?', () =>{
+    this.userService.deletePhoto(this.authService.decodedToken.nameid, id).subscribe(() => {
+      this.photos.splice(this.photos.findIndex(p => p.id === id), 1);
+      this.alertify.success('Photo has been deleted');
+    }, error => {
+      this.alertify.error('Failed to delete the photo');
+    });
+  });
+}}
