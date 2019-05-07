@@ -134,7 +134,7 @@ namespace DatingApp.API.Data
             return PagedList<Message>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
         }
 
-        public Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId)
+        public async Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId)
         {
                var messages = await _context.Messages.Include(u => u.Sender).ThenInclude(p => p.Photos)
             .Include(u => u.Recipient).ThenInclude(p => p.Photos).Where(m => m.RecipientId ==userId && m.SenderId ==recipientId || 
